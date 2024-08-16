@@ -11,3 +11,4 @@ Current Features:
 Planned Enhancements:
 Connectivity Check: Integrate the connectivity_plus package to check Wi-Fi status before making API calls. This could enable the app to show a Snackbar with connectivity status feedback.
 
+(Kindly check the master branch)
