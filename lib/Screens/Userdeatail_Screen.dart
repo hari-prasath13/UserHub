@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:user_details/Model/User_model.dart';
+import 'package:user_details/Common/Color_Constant.dart';
 
-class UserdeatailScreen extends StatefulWidget {
-  const UserdeatailScreen({super.key});
+class UserdeatailScreen extends StatelessWidget {
+  final User user;
 
-  @override
-  State<UserdeatailScreen> createState() => _UserdeatailScreenState();
-}
+  const UserdeatailScreen({super.key, required this.user});
 
-class _UserdeatailScreenState extends State<UserdeatailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0d121d),
+      backgroundColor: ColorConstant.mainblue,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: const Color(0xFF0d121d),
+        backgroundColor: ColorConstant.mainblue,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.w),
         child: Center(
           child: Container(
             width: 500.w,
-            height: 310.h,
+            height: 340.h,
             padding: EdgeInsets.all(16.0.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF1d2739),
+              color: ColorConstant.lightblue,
               borderRadius: BorderRadius.circular(8.0.r),
             ),
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name: Leanne Graham',
+                  'Name: ${user.name}',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.sp,
@@ -44,7 +42,7 @@ class _UserdeatailScreenState extends State<UserdeatailScreen> {
                 ),
                 SizedBox(height: 8.0.h),
                 Text(
-                  'Username: Bret',
+                  'Username: ${user.username}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
@@ -52,7 +50,7 @@ class _UserdeatailScreenState extends State<UserdeatailScreen> {
                 ),
                 SizedBox(height: 8.0.h),
                 Text(
-                  'Email: Sincere@april.biz',
+                  'Email: ${user.email}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
@@ -68,36 +66,28 @@ class _UserdeatailScreenState extends State<UserdeatailScreen> {
                   ),
                 ),
                 Text(
-                  '  Street: Kulas Light',
+                  '  Street: ${user.street}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
                   ),
                 ),
                 Text(
-                  '  Suite: Apt. 556',
+                  '  Suite: ${user.suite}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
                   ),
                 ),
                 Text(
-                  '  City: Gwenborough',
+                  '  City: ${user.city}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
                   ),
                 ),
                 Text(
-                  '  Zipcode: 92998-3874',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16.sp,
-                  ),
-                ),
-                SizedBox(height: 6.0.h),
-                Text(
-                  'Phone: 1-770-736-8031 x56442',
+                  '  Zipcode: ${user.zipcode}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
@@ -105,7 +95,7 @@ class _UserdeatailScreenState extends State<UserdeatailScreen> {
                 ),
                 SizedBox(height: 6.0.h),
                 Text(
-                  'Website: hildegard.org',
+                  'Phone: ${user.phone}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,
@@ -113,7 +103,15 @@ class _UserdeatailScreenState extends State<UserdeatailScreen> {
                 ),
                 SizedBox(height: 6.0.h),
                 Text(
-                  'Company: Romaguera-Crona',
+                  'Website: ${user.website}',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16.sp,
+                  ),
+                ),
+                SizedBox(height: 6.0.h),
+                Text(
+                  'Company: ${user.companyName}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16.sp,

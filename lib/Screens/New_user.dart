@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:user_details/Screens/User_screen.dart';
+import 'package:user_details/Common/Color_Constant.dart';
+import 'package:user_details/Screens/Home_screen.dart';
 
 class NewUser extends StatefulWidget {
   const NewUser({super.key});
@@ -25,13 +26,13 @@ class _NewUserState extends State<NewUser> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0d121d),
+      backgroundColor: ColorConstant.mainblue,
       appBar: AppBar(
         title: Text("NEW USER", style: TextStyle(color: Colors.white,fontSize: 18.sp)),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: const Color(0xFF0d121d),
+        backgroundColor: ColorConstant.mainblue,
       ),
       body: Form(
         key: _formKey,
@@ -54,7 +55,7 @@ class _NewUserState extends State<NewUser> {
                 Container(
                   height: 41.h,
                   decoration: BoxDecoration(
-                    color: Color(0xFF1d2739),
+                    color: ColorConstant.lightblue,
                     borderRadius: BorderRadius.circular(8.0.r),
 
                   ),
@@ -63,12 +64,12 @@ class _NewUserState extends State<NewUser> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const UserScreen(),
+                          builder: (context) => const HomeScreen(),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF1d2739),
+                      backgroundColor: ColorConstant.lightblue,
 
                     ),
                     child: Text(
@@ -86,7 +87,7 @@ class _NewUserState extends State<NewUser> {
 
   Widget _buildTextFormField(TextEditingController controller, String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 7.0),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
@@ -94,7 +95,7 @@ class _NewUserState extends State<NewUser> {
           labelStyle: const TextStyle(color: Colors.white),
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: Colors.white),
           ),
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),

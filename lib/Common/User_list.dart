@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:user_details/Blocs/user_bloc.dart';
+import 'package:user_details/Model/User_model.dart';
 import 'package:user_details/Screens/Userdeatail_Screen.dart';
+import 'package:user_details/Common/Color_Constant.dart';
 
 class UserList extends StatefulWidget {
   const UserList({super.key});
@@ -10,14 +14,31 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
+  late TextEditingController _searchController;
+  List<User> _allUsers = [];
+  List<User> _filteredUsers = [];
 
-  final List<Map<String, String>> users = [
-    {'name': 'Alice Smith', 'email': 'alice.smith@example.com'},
-    {'name': 'Bob Johnson', 'email': 'bob.johnson@example.com'},
-    {'name': 'Charlie Brown', 'email': 'charlie.brown@example.com'},
-    {'name': 'David Wilson', 'email': 'david.wilson@example.com'},
-    {'name': 'Eva Green', 'email': 'eva.green@example.com'},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    _searchController.addListener(_filterUsers);
+    context.read<UserBloc>().add(FetchUsers());
+  }
+
+  void _filterUsers() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredUsers = _allUsers.where((user) {
+        final userName = user.name.toLowerCase();
+        return userName.contains(query);
+      }).toList();
+    });
+  }
+
+  Future<void> _refreshData() async {
+    context.read<UserBloc>().add(FetchUsers());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,59 +48,99 @@ class _UserListState extends State<UserList> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
-            child: const TextField(
-              decoration: InputDecoration(
+            child: TextField(
+              controller: _searchController,
+              style: const TextStyle(color: Colors.white),
+              cursorColor: Colors.white,
+              decoration: const InputDecoration(
                 labelText: 'Search',
-                suffixIcon: Icon(Icons.search,size: 30,),
+                suffixIcon: Icon(
+                  Icons.search,
+                  size: 30,
+                ),
               ),
             ),
           ),
-          SizedBox(height: 10.h,),
-
+          SizedBox(height: 10.h),
           Expanded(
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                final user = users[index];
-                return Padding(
-                  padding: EdgeInsets.all(8.0.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserdeatailScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(16.0.w),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF1d2739),
-                        borderRadius: BorderRadius.circular(8.0.r),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Name: ${user['name']}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
+            child: BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                if (state is UserLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is UserLoaded) {
+                  if (_allUsers.isEmpty) {
+                    _allUsers = state.users;
+                    _filteredUsers = _allUsers;
+                  }
+                  return RefreshIndicator(
+                    onRefresh: _refreshData,
+                    child: ListView.builder(
+                      itemCount: _filteredUsers.length,
+                      itemBuilder: (context, index) {
+                        final user = _filteredUsers[index];
+                        return Padding(
+                          padding: EdgeInsets.all(8.0.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserdeatailScreen(user: user),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(16.0.w),
+                              decoration: BoxDecoration(
+                                color: ColorConstant.lightblue,
+                                borderRadius: BorderRadius.circular(8.0.r),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Name: ${user.name}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 17.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 7),
+                                  Text(
+                                    'Email: ${user.email}',
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Email: ${user['email']}',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
+                  );
+                } else if (state is UserError) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message)),
+                    );
+                  });
+                  return const Center(
+                    child: Text(
+                      'Failed to load users',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+                return const Center(
+                  child: Text(
+                    'No data available',
+                    style: TextStyle(color: Colors.white),
                   ),
                 );
               },
@@ -88,5 +149,11 @@ class _UserListState extends State<UserList> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
