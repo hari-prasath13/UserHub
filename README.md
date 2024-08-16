@@ -1,16 +1,14 @@
-# user_details
+# USER HUB
 
-A new Flutter project.
+This app is designed to display user details fetched from an API.
 
-## Getting Started
+Current Features:
 
-This project is a starting point for a Flutter application.
+1. Search Bar: Allows users to search by name, showing matching user cards.
+2. User Details: Clicking on a card reveals detailed information about the selected user.
+3. Add New User: Includes a form for adding new users. Note that this feature is currently non-functional due to the API lacking POST request support, but it demonstrates the intended functionality.
+   
+Planned Enhancements: 
+Connectivity Check: Integrate the connectivity_plus package to check Wi-Fi status before making API calls. This could enable the app to show a Snackbar with connectivity status feedback.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+(Kindly check the master branch)
